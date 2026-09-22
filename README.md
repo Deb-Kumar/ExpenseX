@@ -79,7 +79,21 @@
 
 ```text
 ExpenseX/
-├── client/                       # React 18 + Vite Frontend
+├── backend/                      # Node.js + Express REST API
+│   ├── config/                   # MongoDB Atlas connection (Mongoose)
+│   ├── controllers/              # Business logic handlers (auth, transactions, budgets)
+│   ├── middleware/               # JWT auth & error handling middleware
+│   ├── models/                   # Mongoose Schemas (User, Transaction, Budget)
+│   ├── routes/                   # API endpoint definitions
+│   ├── services/                 # Email OTP, Google Auth & in-memory fallback
+│   ├── .env                      # Backend environment variables
+│   ├── .env.example              # Server environment template
+│   ├── .gitignore                # Backend-specific ignore rules
+│   ├── package.json
+│   ├── package-lock.json
+│   └── server.js                 # Express application entrypoint
+│
+├── web-app/                      # React 18 + Vite Frontend
 │   ├── public/                   # Favicons, web manifest, static logos
 │   ├── src/
 │   │   ├── assets/               # Branding graphics & logo variants
@@ -99,41 +113,24 @@ ExpenseX/
 │   │   │   └── UserAvatar.jsx
 │   │   ├── config/               # Firebase & app configuration
 │   │   ├── context/              # AuthContext & ToastContext providers
-│   │   ├── pages/                # Application views
-│   │   │   ├── Budgets.jsx       # Category budget targets & progress
-│   │   │   ├── Dashboard.jsx     # Financial overview & Recharts analytics
-│   │   │   ├── Login.jsx         # Sign-in portal
-│   │   │   ├── Reports.jsx       # Custom date range & export center
-│   │   │   ├── Settings.jsx      # Profile, currency & security settings
-│   │   │   ├── Signup.jsx        # Account registration
-│   │   │   └── Transactions.jsx  # Transaction ledger with search/filters
+│   │   ├── pages/                # Application views (Budgets, Dashboard, Login, etc.)
 │   │   ├── services/             # Axios API client & interceptors
 │   │   ├── utils/                # Categories, currency & export helpers
 │   │   ├── App.jsx               # Route configuration & layout shell
 │   │   ├── index.css             # Tailwind CSS & glassmorphic styling
 │   │   └── main.jsx              # Application bootstrap
+│   ├── .env                      # Web app environment variables
 │   ├── .env.example              # Client environment template
+│   ├── .gitignore                # Frontend-specific ignore rules
+│   ├── index.html
 │   ├── package.json
+│   ├── package-lock.json
+│   ├── postcss.config.js
 │   ├── tailwind.config.js
 │   └── vite.config.js
 │
-├── server/                       # Node.js + Express REST API
-│   ├── src/
-│   │   ├── config/               # MongoDB Atlas connection (Mongoose)
-│   │   ├── controllers/          # Business logic handlers
-│   │   │   ├── authController.js
-│   │   │   ├── budgetController.js
-│   │   │   └── transactionController.js
-│   │   ├── middleware/           # JWT auth & error handling middleware
-│   │   ├── models/               # Mongoose Schemas (User, Transaction, Budget)
-│   │   ├── routes/               # API endpoint definitions
-│   │   ├── services/             # Email OTP, Google Auth & in-memory fallback
-│   │   └── server.js             # Express application entrypoint
-│   ├── .env.example              # Server environment template
-│   └── package.json
-│
 ├── docs/                         # Architecture, PRD & design specifications
-├── .gitignore                    # Git tracking rules
+├── .gitignore                    # Global git tracking rules
 └── README.md                     # Project documentation
 ```
 
@@ -171,11 +168,11 @@ cd ExpenseX
 
 ---
 
-### 3. Backend Setup (`server/`)
+### 3. Backend Setup (`backend/`)
 
-1. Navigate to the server directory:
+1. Navigate to the backend directory:
    ```bash
-   cd server
+   cd backend
    npm install
    ```
 
@@ -184,7 +181,7 @@ cd ExpenseX
    cp .env.example .env
    ```
 
-3. Update `server/.env` with your credentials:
+3. Update `backend/.env` with your credentials:
    ```env
    PORT=5000
    NODE_ENV=development
@@ -200,16 +197,18 @@ cd ExpenseX
 4. Start the backend server:
    ```bash
    npm run dev
+   # or
+   npm start
    ```
    *The backend will boot at `http://localhost:5000` (Health Check: `http://localhost:5000/api/health`).*
 
 ---
 
-### 4. Frontend Setup (`client/`)
+### 4. Frontend Web App Setup (`web-app/`)
 
-1. Open a new terminal and navigate to the client directory:
+1. Open a new terminal and navigate to the web-app directory:
    ```bash
-   cd client
+   cd web-app
    npm install
    ```
 
@@ -218,7 +217,7 @@ cd ExpenseX
    cp .env.example .env
    ```
 
-3. Update `client/.env`:
+3. Update `web-app/.env`:
    ```env
    VITE_API_URL=/api
    VITE_FIREBASE_API_KEY=your_firebase_api_key
@@ -232,8 +231,10 @@ cd ExpenseX
 4. Start the frontend development server:
    ```bash
    npm run dev
+   # or
+   npm start
    ```
-   *The client will be accessible at `http://localhost:5173`.*
+   *The web app will be accessible at `http://localhost:5173`.*
 
 ---
 

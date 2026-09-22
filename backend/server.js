@@ -20,31 +20,10 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 // Connect to MongoDB Atlas
 connectDB();
 
-// Middleware to ensure DB connection before handling serverless requests
-app.use(async (req, res, next) => {
-  if (process.env.MONGO_URI) {
-    await connectDB();
-  }
-  next();
-});
-
 // Middleware
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, or server-to-server)
-      if (!origin) return callback(null, true);
-      // Allow localhost, client URL, or any vercel.app deployment
-      if (
-        origin === CLIENT_URL ||
-        origin.includes('localhost') ||
-        origin.includes('127.0.0.1') ||
-        origin.endsWith('.vercel.app')
-      ) {
-        return callback(null, true);
-      }
-      return callback(null, true);
-    },
+    origin: [CLIENT_URL, 'http://localhost:5173', 'http://127.0.0.1:5173'],
     credentials: true,
   })
 );
@@ -74,14 +53,11 @@ app.get('/', (req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
-// Export for serverless environments (Vercel)
-export default app;
+// Start listening
+app.listen(PORT, () => {
+  console.log(`\n🚀 ExpenseX Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  console.log(`🔗 API Base: http://localhost:${PORT}/api`);
+  console.log(`🔗 Health Check: http://localhost:${PORT}/api/health\n`);
+});
 
-// Start listening if not running in a serverless environment
-if (!process.env.VERCEL) {
-  app.listen(PORT, () => {
-    console.log(`\n🚀 ExpenseX Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-    console.log(`🔗 API Base: http://localhost:${PORT}/api`);
-    console.log(`🔗 Health Check: http://localhost:${PORT}/api/health\n`);
-  });
-}
+export default app;
