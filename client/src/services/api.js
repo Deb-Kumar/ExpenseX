@@ -1,8 +1,22 @@
 import axios from 'axios';
 
+// Determine API base URL dynamically
+const getApiBaseUrl = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  // If deployed on Vercel and env is default '/api', automatically route to live Render backend
+  if (
+    typeof window !== 'undefined' &&
+    window.location.hostname.endsWith('.vercel.app') &&
+    (!envUrl || envUrl === '/api')
+  ) {
+    return 'https://expensex-finance.onrender.com/api';
+  }
+  return envUrl || '/api';
+};
+
 // Configured Axios instance
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: getApiBaseUrl(),
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
