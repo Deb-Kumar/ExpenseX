@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="blueGrad" x1="10" y1="10" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1d4ed8"/>
+      <stop offset="50%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="12" y1="52" x2="52" y2="12" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="50%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#00f59b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Blue Diagonal of X (top-left to bottom-right) -->
+  <path d="M15 15L49 49" stroke="url(#blueGrad)" stroke-width="11" stroke-linecap="round"/>
+
+  <!-- Green Upward Arrow Diagonal of X (bottom-left to top-right) -->
+  <path d="M15 49L42 22" stroke="url(#greenGrad)" stroke-width="11" stroke-linecap="round"/>
+
+  <!-- Dynamic Upward Growth Arrowhead -->
+  <path d="M52 12L37 15L43 21L52 12Z" fill="url(#greenGrad)"/>
+  <path d="M52 12L49 27L43 21L52 12Z" fill="url(#greenGrad)"/>
+  <polygon points="52,12 36,15 42,21 49,28" fill="#00f59b"/>
+
+  <!-- Coin Accent -->
+  <ellipse cx="27" cy="37" rx="4.5" ry="2.2" fill="#00f59b" stroke="#ffffff" stroke-width="0.8"/>
+  <ellipse cx="27" cy="34" rx="4.5" ry="2.2" fill="#10b981" stroke="#ffffff" stroke-width="0.8"/>
+</svg>

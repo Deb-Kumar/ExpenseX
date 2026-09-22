@@ -1,0 +1,45 @@
+import mongoose from 'mongoose';
+import { encryptLegacyPlaintextPasswords, syncEmailVerificationStatus } from '../services/dataStore.js';
+
+export const connectDB = async () => {
+  const uri = process.env.MONGO_URI;
+
+  if (!uri || uri.trim() === '') {
+    console.warn('\n⚠️  [MongoDB Warning]: MONGO_URI is not set in server/.env');
+    console.warn('👉 Please set your MongoDB Atlas connection string in server/.env to enable database features.\n');
+    return false;
+  }
+
+  try {
+    const conn = await mongoose.connect(uri, {
+      dbName: process.env.MONGO_DB_NAME || 'ExpenseX',
+      serverSelectionTimeoutMS: 5000,
+    });
+    console.log(`MongoDB Atlas Connected (${conn.connection.name})...✅`);
+    // Ensure any legacy plaintext passwords are encrypted with bcrypt immediately
+    await encryptLegacyPlaintextPasswords();
+    // Ensure Google accounts and verified emails have isEmailVerified: true in database
+    await syncEmailVerificationStatus();
+    return true;
+  } catch (error) {
+    console.error(`MongoDB Connection Error: ${error.message}`);
+    console.error('Check that your IP address is whitelisted in MongoDB Atlas Network Access (e.g., allow 0.0.0.0/0 for dev) and your credentials are correct.\n');
+    return false;
+  }
+};
+
+export const getDatabaseStatus = () => {
+  const states = {
+    0: 'disconnected',
+    1: 'connected',
+    2: 'connecting',
+    3: 'disconnecting',
+  };
+
+  const state = mongoose.connection.readyState;
+  return {
+    stateCode: state,
+    status: states[state] || 'unknown',
+    isConfigured: Boolean(process.env.MONGO_URI && process.env.MONGO_URI.trim() !== ''),
+  };
+};

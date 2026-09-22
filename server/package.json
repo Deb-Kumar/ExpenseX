@@ -1,0 +1,32 @@
+{
+  "name": "expensex-server",
+  "version": "1.0.0",
+  "description": "Backend API for ExpenseX - Personal Finance Tracker",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "google-auth-library": "^9.15.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "morgan": "^1.10.0",
+    "nodemailer": "^10.0.10",
+    "nodemon": "^3.1.14"
+  },
+  "keywords": [
+    "expensex",
+    "finance",
+    "api",
+    "express",
+    "mongodb"
+  ],
+  "author": "",
+  "license": "ISC"
+}

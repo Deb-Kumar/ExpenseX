@@ -1,0 +1,250 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  body {
+    background-color: #0a0f1d;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.5) 0px, transparent 100%);
+    background-attachment: fixed;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: rgba(17, 24, 39, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-card {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .glass-card:hover {
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0f1d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Toast Progress Animation */
+@keyframes progressShrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+.animate-progress {
+  animation: progressShrink linear forwards;
+}
+
+/* =========================================
+   ExpenseX Premium Fintech Loader
+   Pure CSS • Transparent • No Dependencies
+   ========================================= */
+
+.expensex-loader {
+  --navy: #071b3a;
+  --blue: #123f78;
+  --teal: #00bfa6;
+  --green: #19d39a;
+
+  position: relative;
+  width: 72px;
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+
+  animation: expensex-breathe 1.8s ease-in-out infinite;
+}
+
+/* Main X */
+.expensex-loader::before,
+.expensex-loader::after {
+  content: "";
+  position: absolute;
+
+  width: 18px;
+  height: 72px;
+
+  border-radius: 999px;
+
+  transform-origin: center;
+
+  background: linear-gradient(
+    180deg,
+    var(--navy) 0%,
+    var(--blue) 42%,
+    var(--teal) 100%
+  );
+
+  animation: expensex-x 1.4s cubic-bezier(.65, 0, .35, 1) infinite;
+}
+
+/* First X ribbon */
+.expensex-loader::before {
+  transform: rotate(45deg);
+}
+
+/* Second X ribbon */
+.expensex-loader::after {
+  background: linear-gradient(
+    180deg,
+    var(--green) 0%,
+    var(--teal) 55%,
+    var(--navy) 100%
+  );
+
+  transform: rotate(-45deg);
+}
+
+/* =========================================
+   Inner growth arrow
+   ========================================= */
+
+.expensex-loader {
+  isolation: isolate;
+}
+
+.expensex-loader > span {
+  display: none;
+}
+
+/* =========================================
+   Smooth X morphing
+   ========================================= */
+
+@keyframes expensex-x {
+
+  0% {
+    transform: rotate(45deg) scaleY(0.82);
+    opacity: 0.65;
+  }
+
+  25% {
+    transform: rotate(45deg) scaleY(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: rotate(135deg) scaleY(0.82);
+    opacity: 0.85;
+  }
+
+  75% {
+    transform: rotate(135deg) scaleY(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotate(405deg) scaleY(0.82);
+    opacity: 0.65;
+  }
+}
+
+/* =========================================
+   Premium breathing effect
+   ========================================= */
+
+@keyframes expensex-breathe {
+
+  0%,
+  100% {
+    transform: scale(0.92);
+  }
+
+  50% {
+    transform: scale(1);
+  }
+}
+
+/* =========================================
+   Accessibility
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .expensex-loader,
+  .expensex-loader::before,
+  .expensex-loader::after {
+    animation: none;
+  }
+
+}
+
+/* =========================================
+   Recharts Dark Theme Transparent Overrides
+   ========================================= */
+.recharts-tooltip-cursor,
+.recharts-default-tooltip-cursor {
+  fill: transparent !important;
+  stroke: transparent !important;
+  opacity: 0 !important;
+}
+
+.recharts-cartesian-grid-bg {
+  fill: transparent !important;
+}
+
+.recharts-wrapper,
+.recharts-surface {
+  background: transparent !important;
+  outline: none !important;
+}
+
+.recharts-bar-rectangle:focus,
+.recharts-bar-rectangles:focus {
+  outline: none !important;
+}
+
+/* Interactive Chart Elements */
+.recharts-bar-rectangle {
+  cursor: pointer !important;
+  transition: opacity 0.15s ease, filter 0.15s ease;
+}
+
+.recharts-bar-rectangle:hover {
+  opacity: 0.85;
+  filter: brightness(1.15) drop-shadow(0 4px 12px rgba(99, 102, 241, 0.25));
+}
+
+.recharts-area-dot,
+.recharts-active-dot {
+  cursor: pointer !important;
+}
