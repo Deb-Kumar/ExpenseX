@@ -19,11 +19,13 @@ import {
   ShieldAlert,
   Calendar,
   Globe,
+  Trash2,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import ConfirmModal from '../components/ConfirmModal';
 import EditProfileModal from '../components/EditProfileModal';
+import DeleteAccountModal from '../components/DeleteAccountModal';
 import UserAvatar from '../components/UserAvatar';
 import { CURRENCIES, getCurrencySymbol } from '../utils/currency';
 
@@ -38,6 +40,8 @@ export default function Settings() {
   // Modals state
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
+
 
   // Security / Password state
   const [newPassword, setNewPassword] = useState('');
@@ -100,8 +104,9 @@ export default function Settings() {
 
   // Logout handler
   const handleLogout = () => {
+    setShowLogoutModal(false);
     logout();
-    toast.info('You have signed out successfully.', 'Signed Out');
+    toast.info('You have been signed out successfully.', 'Signed Out');
     navigate('/login');
   };
 
@@ -567,6 +572,133 @@ export default function Settings() {
         </div>
       </div>
 
+      {/* =========================================================================
+          ACCOUNT CONTROLS ROW (Positioned Below Default Currency):
+          - LEFT CONTAINER: Delete Account (Danger Zone) with Confirmation Modal & Consents
+          - RIGHT CONTAINER: Active Session & Sign Out Button
+          ========================================================================= */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-stretch">
+        {/* LEFT CONTAINER: Delete Account (Danger Zone) */}
+        <div className="lg:col-span-6 flex flex-col">
+          <div className="glass-panel px-4 sm:px-5 pt-4 pb-5 rounded-2xl sm:rounded-3xl border border-rose-500/20 bg-rose-950/10 shadow-xl flex-1 flex flex-col justify-between space-y-4 relative overflow-hidden group hover:border-rose-500/40 transition-all">
+            {/* Glow backdrop */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-rose-500/5 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="space-y-3">
+              {/* Header */}
+              <div className="flex items-center justify-between border-b border-rose-500/10 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400">
+                    <Trash2 className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h2 className="text-base font-bold text-white leading-tight">Delete Account</h2>
+                    <p className="text-xs text-rose-300/80">Permanent account & data removal</p>
+                  </div>
+                </div>
+
+                <span className="px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider bg-rose-500/20 border border-rose-500/30 text-rose-300">
+                  Danger Zone
+                </span>
+              </div>
+
+              {/* Description */}
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Permanently purge your account and all associated financial records including transactions, custom budgets, categories, and personal profile information. This process is irreversible.
+              </p>
+
+              {/* Warning note */}
+              <div className="flex items-start gap-2 p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs">
+                <AlertTriangle className="w-4 h-4 shrink-0 text-rose-400 mt-0.5" />
+                <span className="leading-snug">
+                  Once deleted, your account and historical records cannot be recovered or restored under any circumstances.
+                </span>
+              </div>
+            </div>
+
+            {/* Action Button */}
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => setShowDeleteAccountModal(true)}
+                className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-rose-500/15 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 hover:border-rose-500 text-xs font-bold transition-all duration-200 active:scale-95 shadow-md shadow-rose-950/30 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Trash2 className="w-4 h-4" />
+                <span>Delete Account</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT CONTAINER: Active Session & Logout */}
+        <div className="lg:col-span-6 flex flex-col">
+          <div className="glass-panel px-4 sm:px-5 pt-4 pb-5 rounded-2xl sm:rounded-3xl border border-white/10 shadow-xl flex-1 flex flex-col justify-between space-y-4 relative overflow-hidden group hover:border-white/20 transition-all">
+            {/* Glow backdrop */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="space-y-3">
+              {/* Header */}
+              <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400">
+                    <LogOut className="w-5 h-5 translate-x-0.5" />
+                  </div>
+                  <div>
+                    <h2 className="text-base font-bold text-white leading-tight">Account Session</h2>
+                    <p className="text-xs text-slate-400">Current authentication status</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-bold bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Active Session</span>
+                </div>
+              </div>
+
+              {/* User Session Info Box */}
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/60 border border-white/5">
+                <div className="flex items-center gap-3 min-w-0">
+                  <UserAvatar
+                    src={user?.profilePicture}
+                    name={user?.name}
+                    size="md"
+                    rounded="rounded-xl"
+                  />
+                  <div className="min-w-0">
+                    <div className="text-xs font-bold text-white truncate">
+                      {user?.name || 'ExpenseX User'}
+                    </div>
+                    <div className="text-[11px] text-slate-400 truncate">
+                      {user?.email}
+                    </div>
+                  </div>
+                </div>
+
+                <span className="px-2 py-0.5 rounded-lg text-[10px] font-semibold bg-slate-800 border border-white/10 text-slate-300 capitalize shrink-0 ml-2">
+                  {user?.authProvider === 'google' ? 'Google Auth' : 'Email Account'}
+                </span>
+              </div>
+
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Sign out of your active session on this device. Your data will remain safe and securely synced across your devices.
+              </p>
+            </div>
+
+            {/* Action Button */}
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => setShowLogoutModal(true)}
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-rose-500/20 hover:from-amber-500 hover:to-rose-600 border border-amber-500/40 hover:border-rose-500 text-amber-200 hover:text-white text-xs font-bold transition-all duration-200 active:scale-95 shadow-lg shadow-amber-500/10 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Sign Out of ExpenseX</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Brand & Version Footer */}
       <div className="flex items-center justify-center gap-2 pt-1 text-slate-500 text-xs">
         <img src="/logo-badge.png" alt="ExpenseX" className="w-4 h-4 object-contain rounded-md opacity-80" />
@@ -577,6 +709,12 @@ export default function Settings() {
       <EditProfileModal
         isOpen={showEditProfileModal}
         onClose={() => setShowEditProfileModal(false)}
+      />
+
+      {/* MODAL: Delete Account with Consents Modal */}
+      <DeleteAccountModal
+        isOpen={showDeleteAccountModal}
+        onClose={() => setShowDeleteAccountModal(false)}
       />
 
       {/* MODAL 3: Sign Out Confirmation Modal */}

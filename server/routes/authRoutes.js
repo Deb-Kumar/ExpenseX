@@ -10,6 +10,7 @@ import {
   verifyPassword,
   sendEmailOtp,
   verifyEmailOtp,
+  deleteAccount,
 } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -25,5 +26,6 @@ router.put('/set-password', protect, setPassword);
 router.post('/verify-password', protect, verifyPassword);
 router.post('/send-email-otp', protect, sendEmailOtp);
 router.post('/verify-email-otp', protect, verifyEmailOtp);
+router.delete('/account', protect, deleteAccount);
 
 export default router;

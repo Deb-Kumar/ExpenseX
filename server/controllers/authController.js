@@ -9,6 +9,7 @@ import {
   setUserEmailOtp,
   verifyUserEmailOtp,
   getTransactions,
+  deleteUserData,
 } from '../services/dataStore.js';
 import { verifyGoogleToken } from '../services/googleAuth.js';
 import { sendVerificationOtpEmail } from '../services/emailService.js';
@@ -456,3 +457,21 @@ export const verifyPassword = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Permanently delete account and all associated data
+// @route   DELETE /api/auth/account
+// @access  Private
+export const deleteAccount = async (req, res, next) => {
+  try {
+    const userId = req.user._id || req.user.id;
+    await deleteUserData(userId);
+
+    res.status(200).json({
+      success: true,
+      message: 'Your account and all associated financial records have been permanently deleted.',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

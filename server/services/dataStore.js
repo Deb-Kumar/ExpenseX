@@ -595,3 +595,30 @@ export const deleteBudget = async (id, userId) => {
   memBudgets.delete(id.toString());
   return b;
 };
+
+// ================= ACCOUNT PURGE / DELETE USER DATA =================
+export const deleteUserData = async (userId) => {
+  const uid = userId.toString();
+  if (isMongoConnected()) {
+    await Promise.all([
+      Transaction.deleteMany({ userId }),
+      Budget.deleteMany({ userId }),
+      User.findByIdAndDelete(userId),
+    ]);
+    return true;
+  }
+
+  // In-memory fallback
+  for (const [id, tx] of memTransactions.entries()) {
+    if (tx.userId && tx.userId.toString() === uid) {
+      memTransactions.delete(id);
+    }
+  }
+  for (const [id, b] of memBudgets.entries()) {
+    if (b.userId && b.userId.toString() === uid) {
+      memBudgets.delete(id);
+    }
+  }
+  memUsers.delete(uid);
+  return true;
+};

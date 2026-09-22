@@ -9,6 +9,7 @@ import {
   setPasswordApi,
   sendEmailOtpApi,
   verifyEmailOtpApi,
+  deleteAccountApi,
 } from '../services/api';
 
 const AuthContext = createContext(null);
@@ -154,6 +155,14 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
+  const deleteAccount = async () => {
+    try {
+      await deleteAccountApi();
+    } finally {
+      logout();
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -165,6 +174,7 @@ export const AuthProvider = ({ children }) => {
         loginWithGoogle,
         loginWithFirebase,
         logout,
+        deleteAccount,
         updateCurrency,
         updateProfile,
         setAccountPassword,

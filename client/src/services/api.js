@@ -109,6 +109,11 @@ export const verifyEmailOtpApi = async ({ newEmail, otp }) => {
   return res.data;
 };
 
+export const deleteAccountApi = async () => {
+  const res = await api.delete('/auth/account');
+  return res.data;
+};
+
 // Transactions
 export const fetchTransactionsApi = async (params = {}) => {
   const res = await api.get('/transactions', { params });
