@@ -23,7 +23,6 @@ connectDB();
 const allowedOrigins = [
   process.env.CLIENT_URL,
   'https://expensex-finance.vercel.app',
-  'https://expense-x.vercel.app',
   'http://localhost:5173',
   'http://127.0.0.1:5173',
 ].filter(Boolean);

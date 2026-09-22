@@ -1,5 +1,13 @@
 import mongoose from 'mongoose';
+import dns from 'dns';
 import { encryptLegacyPlaintextPasswords, syncEmailVerificationStatus } from '../services/dataStore.js';
+
+// Resolve MongoDB Atlas SRV records on Windows networks where local DNS blocks querySrv
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
+} catch {
+  // Ignore if custom DNS is not permitted
+}
 
 let connectionPromise = null;
 
