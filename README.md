@@ -79,21 +79,21 @@
 
 ```text
 ExpenseX/
-├── backend/                      # Node.js + Express REST API
+├── server/                       # Node.js + Express REST API
 │   ├── config/                   # MongoDB Atlas connection (Mongoose)
 │   ├── controllers/              # Business logic handlers (auth, transactions, budgets)
 │   ├── middleware/               # JWT auth & error handling middleware
 │   ├── models/                   # Mongoose Schemas (User, Transaction, Budget)
 │   ├── routes/                   # API endpoint definitions
 │   ├── services/                 # Email OTP, Google Auth & in-memory fallback
-│   ├── .env                      # Backend environment variables
+│   ├── .env                      # Server environment variables
 │   ├── .env.example              # Server environment template
-│   ├── .gitignore                # Backend-specific ignore rules
+│   ├── .gitignore                # Server-specific ignore rules
 │   ├── package.json
 │   ├── package-lock.json
 │   └── server.js                 # Express application entrypoint
 │
-├── web-app/                      # React 18 + Vite Frontend
+├── client/                       # React 18 + Vite Frontend
 │   ├── public/                   # Favicons, web manifest, static logos
 │   ├── src/
 │   │   ├── assets/               # Branding graphics & logo variants
@@ -119,9 +119,9 @@ ExpenseX/
 │   │   ├── App.jsx               # Route configuration & layout shell
 │   │   ├── index.css             # Tailwind CSS & glassmorphic styling
 │   │   └── main.jsx              # Application bootstrap
-│   ├── .env                      # Web app environment variables
+│   ├── .env                      # Client environment variables
 │   ├── .env.example              # Client environment template
-│   ├── .gitignore                # Frontend-specific ignore rules
+│   ├── .gitignore                # Client-specific ignore rules
 │   ├── index.html
 │   ├── package.json
 │   ├── package-lock.json
@@ -168,11 +168,11 @@ cd ExpenseX
 
 ---
 
-### 3. Backend Setup (`backend/`)
+### 3. Backend Setup (`server/`)
 
-1. Navigate to the backend directory:
+1. Navigate to the server directory:
    ```bash
-   cd backend
+   cd server
    npm install
    ```
 
@@ -181,7 +181,7 @@ cd ExpenseX
    cp .env.example .env
    ```
 
-3. Update `backend/.env` with your credentials:
+3. Update `server/.env` with your credentials:
    ```env
    PORT=5000
    NODE_ENV=development
@@ -204,11 +204,11 @@ cd ExpenseX
 
 ---
 
-### 4. Frontend Web App Setup (`web-app/`)
+### 4. Frontend Client Setup (`client/`)
 
-1. Open a new terminal and navigate to the web-app directory:
+1. Open a new terminal and navigate to the client directory:
    ```bash
-   cd web-app
+   cd client
    npm install
    ```
 
@@ -217,7 +217,7 @@ cd ExpenseX
    cp .env.example .env
    ```
 
-3. Update `web-app/.env`:
+3. Update `client/.env`:
    ```env
    VITE_API_URL=/api
    VITE_FIREBASE_API_KEY=your_firebase_api_key
@@ -234,7 +234,7 @@ cd ExpenseX
    # or
    npm start
    ```
-   *The web app will be accessible at `http://localhost:5173`.*
+   *The client will be accessible at `http://localhost:5173`.*
 
 ---
 

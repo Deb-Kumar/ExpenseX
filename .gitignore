@@ -12,8 +12,8 @@ node_modules/
 .env.development.local
 .env.test.local
 .env.production.local
-backend/.env
-web-app/.env
+server/.env
+client/.env
 
 # Production build
 dist/
