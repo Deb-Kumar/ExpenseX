@@ -2,11 +2,11 @@
   "name": "expensex-server",
   "version": "1.0.0",
   "description": "Backend API for ExpenseX - Personal Finance Tracker",
-  "main": "src/server.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon src/server.js",
-    "dev": "node --watch src/server.js"
+    "start": "nodemon server.js",
+    "dev": "nodemon --watch server.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

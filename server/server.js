@@ -2,12 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
-import { connectDB } from './config/db.js';
-import healthRoutes from './routes/healthRoutes.js';
-import authRoutes from './routes/authRoutes.js';
-import transactionRoutes from './routes/transactionRoutes.js';
-import budgetRoutes from './routes/budgetRoutes.js';
-import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import { connectDB } from './src/config/db.js';
+import healthRoutes from './src/routes/healthRoutes.js';
+import authRoutes from './src/routes/authRoutes.js';
+import transactionRoutes from './src/routes/transactionRoutes.js';
+import budgetRoutes from './src/routes/budgetRoutes.js';
+import { notFound, errorHandler } from './src/middleware/errorMiddleware.js';
 
 // Load environment variables from .env
 dotenv.config();
