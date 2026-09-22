@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, LogOut, AlertTriangle, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export default function ConfirmModal({
@@ -12,6 +13,27 @@ export default function ConfirmModal({
   type = 'danger', // 'danger' | 'warning' | 'primary' | 'logout'
   icon = null,
 }) {
+  // Lock body scroll and listen for Escape key when modal is open
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const getIconAndStyle = () => {
@@ -47,9 +69,18 @@ export default function ConfirmModal({
 
   const { icon: renderedIcon, style: iconContainerStyle, btnStyle } = getIconAndStyle();
 
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-[#0f172a] border border-white/10 rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+  const modalMarkup = (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirm-modal-title"
+    >
+      <div
+        className="relative bg-[#0f172a] border border-white/10 rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="p-6 text-center">
           <div
@@ -58,7 +89,10 @@ export default function ConfirmModal({
             {renderedIcon}
           </div>
 
-          <h3 className="text-lg font-bold text-white tracking-tight mb-2">
+          <h3
+            id="confirm-modal-title"
+            className="text-lg font-bold text-white tracking-tight mb-2"
+          >
             {title}
           </h3>
 
@@ -72,7 +106,7 @@ export default function ConfirmModal({
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-white/5 active:scale-95 transition-all"
+            className="flex-1 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-white/5 active:scale-95 transition-all cursor-pointer"
           >
             {cancelText}
           </button>
@@ -83,7 +117,7 @@ export default function ConfirmModal({
               onConfirm();
               onClose();
             }}
-            className={`flex-1 py-2.5 px-4 rounded-xl text-white text-xs font-bold shadow-lg active:scale-95 transition-all ${btnStyle}`}
+            className={`flex-1 py-2.5 px-4 rounded-xl text-white text-xs font-bold shadow-lg active:scale-95 transition-all cursor-pointer ${btnStyle}`}
           >
             {confirmText}
           </button>
@@ -91,4 +125,11 @@ export default function ConfirmModal({
       </div>
     </div>
   );
+
+  // Render into body to escape sticky header/navbar containing block & backdrop-blur
+  if (typeof document !== 'undefined') {
+    return createPortal(modalMarkup, document.body);
+  }
+
+  return modalMarkup;
 }
