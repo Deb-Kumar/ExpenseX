@@ -1,7 +1,19 @@
 import mongoose from 'mongoose';
 import { encryptLegacyPlaintextPasswords, syncEmailVerificationStatus } from '../services/dataStore.js';
 
+let connectionPromise = null;
+
 export const connectDB = async () => {
+  // If already connected, return immediately
+  if (mongoose.connection.readyState >= 1) {
+    return true;
+  }
+
+  // If a connection attempt is in-flight, await it
+  if (connectionPromise) {
+    return await connectionPromise;
+  }
+
   const uri = process.env.MONGO_URI;
 
   if (!uri || uri.trim() === '') {
@@ -10,22 +22,26 @@ export const connectDB = async () => {
     return false;
   }
 
-  try {
-    const conn = await mongoose.connect(uri, {
-      dbName: process.env.MONGO_DB_NAME || 'ExpenseX',
-      serverSelectionTimeoutMS: 5000,
-    });
-    console.log(`MongoDB Atlas Connected (${conn.connection.name})...✅`);
-    // Ensure any legacy plaintext passwords are encrypted with bcrypt immediately
-    await encryptLegacyPlaintextPasswords();
-    // Ensure Google accounts and verified emails have isEmailVerified: true in database
-    await syncEmailVerificationStatus();
-    return true;
-  } catch (error) {
-    console.error(`MongoDB Connection Error: ${error.message}`);
-    console.error('Check that your IP address is whitelisted in MongoDB Atlas Network Access (e.g., allow 0.0.0.0/0 for dev) and your credentials are correct.\n');
-    return false;
-  }
+  connectionPromise = (async () => {
+    try {
+      const conn = await mongoose.connect(uri, {
+        dbName: process.env.MONGO_DB_NAME || 'ExpenseX',
+        serverSelectionTimeoutMS: 5000,
+      });
+      console.log(`MongoDB Atlas Connected (${conn.connection.name})...✅`);
+      // Ensure any legacy plaintext passwords are encrypted with bcrypt immediately
+      await encryptLegacyPlaintextPasswords();
+      // Ensure Google accounts and verified emails have isEmailVerified: true in database
+      await syncEmailVerificationStatus();
+      return true;
+    } catch (error) {
+      console.error('Check that your IP address is whitelisted in MongoDB Atlas Network Access (e.g., allow 0.0.0.0/0 for dev) and your credentials are correct.\n');
+      connectionPromise = null;
+      return false;
+    }
+  })();
+
+  return await connectionPromise;
 };
 
 export const getDatabaseStatus = () => {
