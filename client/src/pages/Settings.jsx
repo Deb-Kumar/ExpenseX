@@ -157,15 +157,6 @@ export default function Settings() {
             Manage your personal identity, account credentials, and display preferences.
           </p>
         </div>
-
-        <button
-          type="button"
-          onClick={() => setShowLogoutModal(true)}
-          className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-rose-500/20 active:scale-95 transition-all shadow-sm shadow-rose-950/20 cursor-pointer"
-        >
-          <LogOut className="w-3.5 h-3.5" />
-          <span>Sign Out</span>
-        </button>
       </div>
 
       {/* Critical Alert Banner if Master Password Not Set */}
